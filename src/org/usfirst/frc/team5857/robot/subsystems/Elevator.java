@@ -56,6 +56,9 @@ public class Elevator extends Subsystem {
 			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < 21310) {
 				baseDirection = 1;
 			}
+			else if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) == 21310) {
+				baseDirection = 0;
+			}
 			else if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) > 21310) {
 				baseDirection = -1;
 			}
