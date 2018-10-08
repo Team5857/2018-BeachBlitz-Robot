@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends Subsystem {
+	public Map <String, Integer> testingVals;
 	public String controlMode;
 	public double minValue, maxValue;
 	public static SpeedController elevator1, elevator2;
@@ -39,6 +40,7 @@ public class Elevator extends Subsystem {
 
 	
 	public void toggleElevator(Joystick secondaryStick, Joystick driveStick) {
+		// @mode competition_mode: control mode for competition
 		if(controlMode.equals("competition_mode")) {
 			int baseDirection;
 			double originalSpeed = secondaryStick.getRawAxis(5);
@@ -95,6 +97,45 @@ public class Elevator extends Subsystem {
 				elevator2.set(0);
 			}
 
+		}
+		// @mode test_control_1: testing mode for elevator values
+		else if(controlMode.equals("test_control_1")) {
+			int count = 0;
+			minValue = Integer.MAX_VALUE;
+			maxValue = Integer.MIN_VALUE;
+			testingVals = new TreeMap<String, Integer>();
+			testingVals.put("Minimum Value", minValue);
+			testingVals.put("Maximum Value", maxValue);
+			double originalSpeed = secondaryStick.getRawAxis(5);
+			if(secondaryStick.getRawButtonPressed(4)) {
+				resetEncoder();
+			}
+			elevator1.set(originalSpeed);
+			elevator2.set(-originalSpeed);
+
+			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < minValue) {
+				minValue = ((BaseMotorController) elevator2).getSelectedSensorPosition(0);
+			}
+			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) > maxValue) {
+				maxValue = ((BaseMotorController) elevator2).getSelectedSensorPosition(0);
+			}
+
+			if(secondaryStick.getRawButtonPressed(3)) {
+				testingVals.put("Breakpoint " + Integer.toString(count), ((BaseMotorController) elevator2).getSelectedSensorPosition(0));
+				count++;
+			}
+
+			SmartDashboard.putNumber("Min Value", minValue);
+			SmartDashboard.putNumber("Max Value", maxValue);
+			SmartDashboard.putNumber("Current Value", ((BaseMotorController) elevator2).getSelectedSensorPosition(0));
+
+			if(secondaryStick.getRawButtonPressed(2)) {
+				Iterator<String> iter1 = testingVals.keySet();
+				while(iter1.hasNext()) {
+					String key = iter1.next();
+					System.out.println(key + ": " + Integer.toString(testingVals.get(key)));
+				}
+			}
 		}
 	}
 	
