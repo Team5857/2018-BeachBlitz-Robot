@@ -26,21 +26,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Elevator extends Subsystem {
 	public static double FORCE_CONSTANT = 3;
 	public double runTime;
-	public int direction;
 	public String controlMode, elevatorState;
 	public static SpeedController elevator1, elevator2;
-	public static Encoder encoder;
 	public double maxValue;
 	
 	public Elevator() {
+		resetEncoder();
 		elevator1 = new WPI_TalonSRX(14);
 		elevator2 = new WPI_TalonSRX(0);
-		encoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
 		runTime = 0;
-		direction = 0;
 		elevatorState = "ground";
-		controlMode = "test_control_5";
-		maxValue = 0;
+		controlMode = "competition_mode";
+		minValue = 0;
+		maxValue = 40000;
 	}
 
 	public void toggleElevatorUp(Joystick secondaryStick) {
@@ -123,7 +121,64 @@ public class Elevator extends Subsystem {
 	public void toggleElevator(Joystick secondaryStick, Joystick driveStick) {
 //		updateElevator(secondaryStick);
 //		updateElevator(driveStick);
-		if(controlMode.equals("user_defined")) {
+		if(controlMode.equals("competition_mode")) {
+			int baseDirection;
+			double originalSpeed = secondaryStick.getRawAxis(5);
+			if(secondaryStick.getRawButtonPressed(4)) {
+				resetEncoder();
+			}
+
+			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) >= minValue && numRotations <= maxValue) {
+				elevator1.set(originalSpeed);
+				elevator2.set(-originalSpeed);
+			}
+
+			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < 21310) {
+				baseDirection = 1;
+			}
+			else if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) > 21310) {
+				baseDirection = -1;
+			}
+			if(secondaryStick.getRawButtonPressed(3)) {
+
+				while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < 21310) {
+					elevator1.set(baseDirection*1);
+					elevator2.set(baseDirection*1);
+					if(driveStick.getRawButtonPressed(7)) {
+						elevator1.set(0);
+						elevator2.set(0);
+					}
+				}
+				elevator1.set(0);
+				elevator2.set(0);
+			}
+			if(secondaryStick.getRawButtonPressed(4)) {
+				while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < 40000) {
+					elevator1.set(baseDirection*1);
+					elevator2.set(baseDirection*1);
+					if(driveStick.getRawButtonPressed(7)) {
+						elevator1.set(0);
+						elevator2.set(0);
+					}
+				}
+				elevator1.set(0);
+				elevator2.set(0);
+			}
+			if(driveStick.getRawButton(2)) {
+				while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) > 0) {
+					elevator1.set(-1 * baseDirection * 0.5);
+					elevator2.set(baseDirection * 0.5);
+					if(driveStick.getRawButtonPressed(7)) {
+						elevator1.set(0);
+						elevator2.set(0);
+					}
+				}
+				elevator1.set(0);
+				elevator2.set(0);
+			}
+
+		}
+		else if(controlMode.equals("user_defined")) {
 			if(secondaryStick.getRawButtonPressed(4)) {
 				elevator1.set(direction*0.15);
 				elevator2.set(direction*0.15);
