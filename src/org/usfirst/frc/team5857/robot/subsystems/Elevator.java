@@ -24,7 +24,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends Subsystem {
-	public Map <String, Integer> testingVals;
+	public int count;
+	public Map <String, Integer> testControlMap1, testControlMap2;
 	public String controlMode;
 	public double minValue, maxValue;
 	public static SpeedController elevator1, elevator2;
@@ -36,10 +37,33 @@ public class Elevator extends Subsystem {
 		elevator1 = new WPI_TalonSRX(14);
 		elevator2 = new WPI_TalonSRX(0);
 		controlMode = "competition_mode";
+
+		testControlMap1 = new TreeMap <String, Object>();
+		testControlMap1.put("count", 0);
+		testControlMap1.put("minValue", Integer.MAX_VALUE);
+		testControlMap1.put("maxValue", Integer.MIN_VALUE);
+
 	}
 
 	
 	public void toggleElevator(Joystick secondaryStick, Joystick driveStick) {
+		if(driveStick.getRawButtonPresed(7)) {
+			controlMode = "competition_mode";
+			resetEncoder();
+		}
+		if(driveStick.getRawButtonPresed(8)) {
+			controlMode = "test_control_1";
+			resetEncoder();
+		}
+		if(driveStick.getRawButtonPresed(9)) {
+			controlMode = "test_control_2";
+			resetEncoder();
+		}
+		if(driveStick.getRawButtonPresed(10)) {
+			controlMode = "fix_mode";
+			resetEncoder();
+		}
+		
 		// @mode competition_mode: control mode for competition
 		if(controlMode.equals("competition_mode")) {
 			int baseDirection;
@@ -48,7 +72,7 @@ public class Elevator extends Subsystem {
 				resetEncoder();
 			}
 
-			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) >= minValue && numRotations <= maxValue) {
+			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) >= testControlMap1.get("minValue") && numRotations <= testControlMap1.get("maxValue")) {
 				elevator1.set(originalSpeed);
 				elevator2.set(-originalSpeed);
 			}
@@ -103,12 +127,6 @@ public class Elevator extends Subsystem {
 		}
 		// @mode test_control_1: testing mode for elevator values
 		else if(controlMode.equals("test_control_1")) {
-			int count = 0;
-			minValue = Integer.MAX_VALUE;
-			maxValue = Integer.MIN_VALUE;
-			testingVals = new TreeMap<String, Integer>();
-			testingVals.put("Minimum Value", minValue);
-			testingVals.put("Maximum Value", maxValue);
 			double originalSpeed = secondaryStick.getRawAxis(5);
 			if(secondaryStick.getRawButtonPressed(4)) {
 				resetEncoder();
@@ -117,15 +135,17 @@ public class Elevator extends Subsystem {
 			elevator2.set(-originalSpeed);
 
 			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < minValue) {
-				minValue = ((BaseMotorController) elevator2).getSelectedSensorPosition(0);
+				testControlMap1.set("minValue", ((BaseMotorController) elevator2).getSelectedSensorPosition(0));
+				//minValue = ((BaseMotorController) elevator2).getSelectedSensorPosition(0);
 			}
 			if(((BaseMotorController) elevator2).getSelectedSensorPosition(0) > maxValue) {
-				maxValue = ((BaseMotorController) elevator2).getSelectedSensorPosition(0);
+				testControlMap1.set("maxValue", ((BaseMotorController) elevator2).getSelectedSensorPosition(0));
+				//maxValue = ((BaseMotorController) elevator2).getSelectedSensorPosition(0);
 			}
 
 			if(secondaryStick.getRawButtonPressed(3)) {
-				testingVals.put("Breakpoint " + Integer.toString(count), ((BaseMotorController) elevator2).getSelectedSensorPosition(0));
-				count++;
+				testControlMap1.put("Breakpoint " + Integer.toString(testControlMap1.get("count")), ((BaseMotorController) elevator2).getSelectedSensorPosition(0));
+				testControlMap1.set("count", testControlMap1.get("count")+1);
 			}
 
 			SmartDashboard.putNumber("Min Value", minValue);
@@ -133,12 +153,15 @@ public class Elevator extends Subsystem {
 			SmartDashboard.putNumber("Current Value", ((BaseMotorController) elevator2).getSelectedSensorPosition(0));
 
 			if(secondaryStick.getRawButtonPressed(2)) {
-				Iterator<String> iter1 = testingVals.keySet();
+				Iterator<String> iter1 = testControlMap1.keySet();
 				while(iter1.hasNext()) {
 					String key = iter1.next();
-					System.out.println(key + ": " + Integer.toString(testingVals.get(key)));
+					SmartDashboard.putNumber(key, testControlMap1.get(key));
 				}
 			}
+		}
+		else if(controlMode.equals("test_control_2")) {
+
 		}
 	}
 	

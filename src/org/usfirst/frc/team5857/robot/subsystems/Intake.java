@@ -14,15 +14,14 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Intake extends Subsystem {
-	
+	public String controlMode;
+	public Map<String, Integer> testControlMap1;
 	public static SpeedController intake;
-	public static SpeedController elevator1, elevator2;
 	//private static boolean intakeup = false;
 	
 	public Intake() {
+		controlMode = "test_control_1";
 		intake = new WPI_TalonSRX(1);					//initialize left motors on port 12
-		elevator1 = new WPI_TalonSRX(14);
-		elevator2 = new WPI_TalonSRX(0);
 	}
 
 	public void toggleIntakeOpen(Joystick driveStick, Joystick secondaryStick) {
@@ -48,6 +47,11 @@ public class Intake extends Subsystem {
 			intake.set(0);
 		}
 	}	
+
+	public void toggleIntake(Joystick driveStick, Joystick secondaryStick) {
+
+	}
+
 	public boolean getIntakeSpeed() {
 		return intake.getInverted();
 	}
