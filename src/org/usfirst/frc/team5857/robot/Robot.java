@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
-	public static DriveTrainLeft drivetrainleft;
-	public static DriveTrainRight drivetrainright;
+	public static DriveTrain driveTrain;
+	//public static DriveTrainRight drivetrainright;
 	public PowerDistributionPanel pdp;
 	public static Elevator elevator;
 	public static Intake intake;
@@ -33,16 +33,11 @@ public class Robot extends IterativeRobot {
 	 */
 	public void robotInit() {
 		
-		drivetrainleft = new DriveTrainLeft();
-		drivetrainright = new DriveTrainRight();
-		pdp = new PowerDistributionPanel(0);
+		driveTrain = new DriveTrain();
 		elevator = new Elevator();
 		intake = new Intake();
 
 		oi = new OI();
-
-		pdp.clearStickyFaults();
-
 
 		chooser = new SendableChooser();
 		SmartDashboard.putData("Auto mode", chooser);
@@ -112,8 +107,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void log() {
-		SmartDashboard.putString("DB/String 0", "Speed (L): " + String.format( "%.2f", (drivetrainleft.getLeftSpeed() * 100)) + "%");
-		SmartDashboard.putString("DB/String 5", "Speed (R): " + String.format( "%.2f", (drivetrainright.getRightSpeed() * 100)) + "%");
+		SmartDashboard.putString("DB/String 0", "Speed (L): " + String.format( "%.2f", (driveTrain.getLeftSpeed() * 100)) + "%");
+		SmartDashboard.putString("DB/String 5", "Speed (R): " + String.format( "%.2f", (driveTrain.getRightSpeed() * 100)) + "%");
 		Timer.delay(0.05);
 	}
 }
