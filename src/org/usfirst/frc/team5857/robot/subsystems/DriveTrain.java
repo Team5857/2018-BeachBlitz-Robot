@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
 
 
 public class DriveTrain extends Subsystem {
+	public String driveMode;
 	public static SpeedController left1;
 	public static SpeedController left2;
 	public static SpeedController right1;
@@ -20,21 +21,45 @@ public class DriveTrain extends Subsystem {
 		left2 = new WPI_TalonSRX(3);
 		right1 = new WPI_TalonSRX(13);					//initialize left motors on port 12
 		right2 = new WPI_TalonSRX(12);
+		driveMode = "half_speed";
 	}
 		
-	public void tankDrive(Joystick driveStick) {
-		left1.set(-driveStick.getRawAxis(1)/2);					//left y-axis
-		left2.set(-driveStick.getRawAxis(1)/2);
-		right1.set(driveStick.getRawAxis(5)/2);					//left y-axis
-		right2.set(driveStick.getRawAxis(5)/2);
+	public void tankDrive(Joystick driveStick, Joystick secondaryStick) {
+		if(secondaryStick.getRawButtonPressed(8)) {
+			driveMode = "full_speed";
+		}
+		if(secondaryStick.getRawButtonPressed(7)) {
+			driveMode = "half_speed";
+		}
+		
+		if(driveMode.equals("half_speed")) {
+			DriveTrain.left1.set(driveStick.getRawAxis(1)/2);
+			DriveTrain.left2.set(driveStick.getRawAxis(1)/2);
+			DriveTrain.right1.set(-driveStick.getRawAxis(5)/2);
+			DriveTrain.right2.set(-driveStick.getRawAxis(5)/2);
+		}
+		else if(driveMode.equals("full_speed")) {
+			DriveTrain.left1.set(driveStick.getRawAxis(1));
+			DriveTrain.left2.set(driveStick.getRawAxis(1));
+			DriveTrain.right1.set(-driveStick.getRawAxis(5));
+			DriveTrain.right2.set(-driveStick.getRawAxis(5));
+		}
 	}
 
-	public void tankDrive(Joystick left, Joystick right)
+	public void tankDrive1(Joystick left, Joystick right)
 	{
-		DriveTrain.left1.set(left.getRawAxis(1)/2);
-		DriveTrain.left2.set(left.getRawAxis(1)/2);
-		DriveTrain.right1.set(-right.getRawAxis(5)/2);
-		DriveTrain.right2.set(-right.getRawAxis(5)/2);
+		if(driveMode.equals("half_speed")) {
+			DriveTrain.left1.set(left.getRawAxis(1)/2);
+			DriveTrain.left2.set(left.getRawAxis(1)/2);
+			DriveTrain.right1.set(-right.getRawAxis(5)/2);
+			DriveTrain.right2.set(-right.getRawAxis(5)/2);
+		}
+		else if(driveMode.equals("full_speed")) {
+			DriveTrain.left1.set(left.getRawAxis(1));
+			DriveTrain.left2.set(left.getRawAxis(1));
+			DriveTrain.right1.set(-right.getRawAxis(5));
+			DriveTrain.right2.set(-right.getRawAxis(5));
+		}
 	}
 
 	public void autoDriveAtSpeed(double speed, double leftComp, double seconds) {

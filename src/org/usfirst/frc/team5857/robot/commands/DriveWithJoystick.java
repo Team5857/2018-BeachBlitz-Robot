@@ -14,7 +14,7 @@ public class DriveWithJoystick extends Command {
 	}
 	
 	protected void execute() {
-		Robot.driveTrain.tankDrive(Robot.oi.getDriveStick());
+		Robot.driveTrain.tankDrive(Robot.oi.getDriveStick(), Robot.oi.getSecondaryStick());
 	}
 	
 	protected boolean isFinished() {
