@@ -23,7 +23,7 @@ public class AutonomousCommand extends CommandGroup {
                 addSequential(new AUTO_SHORT_FWD());
                 addSequential(new AUTO_TURN());
                 addSequential(new AUTO_SHORT_UP());
-                addSequential(new AUTO_RELEASE_INAKE());
+                addSequential(new AUTO_RELEASE_INTAKE());
             }
             else if(gameData.charAt(0) == 'L') {
                 addSequential(new AUTO_LOCK_INTAKE());

@@ -14,7 +14,7 @@ public class AUTO_SHORT_UP extends Command {
 	
 	protected void execute()
 	{
-		Robot.elevator.autoMoveElevatorUp("SHORT")
+		Robot.elevator.autoMoveElevatorUp("SHORT");
 	}
 	
 	protected boolean isFinished() {

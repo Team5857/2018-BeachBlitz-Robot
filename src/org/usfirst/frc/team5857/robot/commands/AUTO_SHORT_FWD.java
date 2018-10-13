@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class AUTO_SHORT_FWD extends Command {
 
-	public AUTO_FWD() {
+	public AUTO_SHORT_FWD() {
 		super("AUTO_SHORT_FWD");
 		requires(Robot.driveTrain);
 	}
