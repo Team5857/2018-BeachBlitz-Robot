@@ -8,10 +8,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team5857.robot.commands.DriveWithJoystick;
 
 import com.ctre.phoenix.motorcontrol.can.*;
+import java.util.*;
 
 
 public class DriveTrain extends Subsystem {
 	public String driveMode;
+	public long time1, time2;
 	public static SpeedController left1;
 	public static SpeedController left2;
 	public static SpeedController right1;
@@ -22,6 +24,8 @@ public class DriveTrain extends Subsystem {
 		right1 = new WPI_TalonSRX(13);					//initialize left motors on port 12
 		right2 = new WPI_TalonSRX(12);
 		driveMode = "half_speed";
+		//long time1 = System.currentTimeMillis(); //1
+		//long time2 = System.currentTimeMillis(); //2
 	}
 		
 	public void tankDrive(Joystick driveStick, Joystick secondaryStick) {
@@ -39,6 +43,27 @@ public class DriveTrain extends Subsystem {
 			DriveTrain.right2.set(-driveStick.getRawAxis(5)/2);
 		}
 		else if(driveMode.equals("full_speed")) {
+			DriveTrain.left1.set(driveStick.getRawAxis(1));
+			DriveTrain.left2.set(driveStick.getRawAxis(1));
+			DriveTrain.right1.set(-driveStick.getRawAxis(5));
+			DriveTrain.right2.set(-driveStick.getRawAxis(5));
+
+			if(secondaryStick.getRawButtonPressed(1)) {
+				time1 = System.currentTimeMillis();
+				DriveTrain.left1.set(1);
+				DriveTrain.left2.set(1);
+				DriveTrain.right1.set(-1);
+				DriveTrain.right2.set(-1);
+				if(secondaryStick.getRawButtonPressed(2)) {
+					time2 = System.currentTimeMillis();
+					DriveTrain.left1.set(0);
+					DriveTrain.left2.set(0);
+					DriveTrain.right1.set(0);
+					DriveTrain.right2.set(0);
+				}
+				SmartDashboard.put("TIME", time2 - time1)
+			}
+
 			DriveTrain.left1.set(driveStick.getRawAxis(1));
 			DriveTrain.left2.set(driveStick.getRawAxis(1));
 			DriveTrain.right1.set(-driveStick.getRawAxis(5));
