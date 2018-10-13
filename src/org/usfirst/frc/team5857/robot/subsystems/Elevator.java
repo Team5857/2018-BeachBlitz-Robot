@@ -139,7 +139,7 @@ public class Elevator extends Subsystem {
 	
 	public void resetEncoder() {
 		((BaseMotorController) elevator2).setSelectedSensorPosition(0,  0,  10);
-		System.out.print("Encoder has been reset");
+		System.out.println("Encoder has been reset");
 	}
 	
 	public boolean hasResetOccurred() {

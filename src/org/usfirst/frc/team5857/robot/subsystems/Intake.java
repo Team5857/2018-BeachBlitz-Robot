@@ -45,8 +45,8 @@ public class Intake extends Subsystem {
 			Timer.delay(0.3);
 			intake.set(0.3);
 		}
-		else if(!lockFlag && stateFlag == true) {
-			intake.set(-0.2);
+		else if(!lockFlag && stateFlag) {
+			intake.set(-0.8);
 			Timer.delay(0.1);
 			intake.set(0);
 			stateFlag = false;
