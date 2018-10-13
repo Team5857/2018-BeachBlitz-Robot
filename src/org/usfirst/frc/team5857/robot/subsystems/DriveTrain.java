@@ -62,15 +62,33 @@ public class DriveTrain extends Subsystem {
 		}
 	}
 
-	public void autoDriveAtSpeed(double speed, double leftComp, double seconds) {
-		left1.set(-leftComp*speed);
-		left2.set(-leftComp*speed);
+	public void autoDriveForward(double speed, double rightComp, double leftComp, double seconds) {
+		left1.set(leftComp*speed);
+		left2.set(leftComp*speed);
+		right1.set(-rightComp*speed);
+		right2.set(-rightComp*speed);
 		
 		Timer.delay(seconds);
 		
 		//stop
 		left1.set(0);
 		left2.set(0);
+		right1.set(0);
+		right2.set(0);
+	}
+
+	public void autoDriveTurn() {
+		left1.set(-1);
+		left2.set(-1);
+		right1.set(-1);
+		right2.set(-1);
+		
+		Timer.delay(0.2);
+		
+		left1.set(0);
+		left2.set(0);
+		right1.set(0);
+		right2.set(0);
 	}
 
 	public double getLeftSpeed() {

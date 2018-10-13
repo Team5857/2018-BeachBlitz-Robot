@@ -33,7 +33,7 @@ public class Elevator extends Subsystem {
 	public static SpeedController elevator1, elevator2;
 
 	public Elevator() {
-		//this.resetEncoder();
+		((BaseMotorController) elevator2).setSelectedSensorPosition(0, 0, 10);
 		minValue = 0;
 		maxValue = 70000;
 		elevator1 = new WPI_TalonSRX(14);
@@ -123,8 +123,8 @@ public class Elevator extends Subsystem {
 			if(driveStick.getRawButton(3)) {
 				if(baseDirection == 0 || baseDirection == -1) {
 					while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) > 0) {
-						elevator1.set(-0.5);
-						elevator2.set(0.5);
+						elevator1.set(-1);
+						elevator2.set(1);
 						if(driveStick.getRawButtonPressed(4)) {
 							elevator1.set(0);
 							elevator2.set(0);
@@ -146,11 +146,58 @@ public class Elevator extends Subsystem {
 		return ((BaseMotorController) elevator1).getSelectedSensorPosition(0) == 0;
 	}
 	
-	/*public boolean getElevator1Speed() {
-		return elevator.getInverted();
-	}*/
 	public double getElevator1Speed() {
 		return elevator1.get();
+	}
+
+	public double getElevator2Speed() {
+		return elevator2.get();
+	}
+
+	public void autoMoveElevatorUp(double speed, double seconds) {
+		elevator1.set(speed);
+		elevator2.set(-speed);
+		Timer.delay(seconds);
+		elevator1.set(0);
+		elevator2.set(0);
+	}
+
+	public void autoMoveElevatorUp(String type) {
+		if(type.equals("LONG")) {
+			while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < 70000) {
+				elevator1.set(1);
+				elevator2.set(-1);
+			}
+		}
+		else if(type.equals("SHORT")) {
+			while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < 40000) {
+				elevator1.set(1);
+				elevator2.set(-1);
+			}
+		}
+	}
+
+	public void autoMoveElevatorDown(String type) {
+		if(type.equals("LONG")) {
+			while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) > 0) {
+				elevator1.set(-1);
+				elevator2.set(1);
+			}
+		}
+		else if(type.equals("SHORT")) {
+			while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) > 0) {
+				elevator1.set(-1);
+				elevator2.set(1);
+			}
+		}
+	}
+
+	public void autoMoveElevatorDown(double speed, double seconds) {
+		elevator1.set(-speed);
+		elevator2.set(speed);
+		Timer.delay(seconds);
+		elevator1.set(0);
+		elevator2.set(0);
 	}
 
 	public void initDefaultCommand() {

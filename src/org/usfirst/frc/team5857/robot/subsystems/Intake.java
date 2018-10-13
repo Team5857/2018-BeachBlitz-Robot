@@ -27,7 +27,6 @@ public class Intake extends Subsystem {
 		elevator2 = new WPI_TalonSRX(0);
 		stateFlag = false;
 		lockFlag = false;
-
 	}
 	
 	public void toggleIntake(Joystick driveStick, Joystick secondaryStick) {
@@ -52,6 +51,19 @@ public class Intake extends Subsystem {
 			stateFlag = false;
 		}
 	}	
+
+	public void autoLockIntake() {
+		intake.set(1);
+		Timer.delay(0.3);
+		intake.set(0.3);
+	}
+
+	public void autoReleaseIntake() {
+		intake.set(-1);
+		Timer.delay(0.3);
+		intake.set(0);
+	}
+
 	public boolean getIntakeSpeed() {
 		return intake.getInverted();
 	}
