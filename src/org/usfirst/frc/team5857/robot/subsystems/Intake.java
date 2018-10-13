@@ -30,25 +30,34 @@ public class Intake extends Subsystem {
 	}
 	
 	public void toggleIntake(Joystick driveStick, Joystick secondaryStick) {
-		if(driveStick.getRawButtonPressed(6)){
-			intake.set(1);
-			lockFlag = true;
-			stateFlag = true;
-		} 
-
-		if(driveStick.getRawButtonPressed(5)){
-			lockFlag = false;
+//		if(driveStick.getRawButtonPressed(6)){
+//			intake.set(1);
+//			lockFlag = true;
+//			stateFlag = true;
+//		} 
+//
+//		if(driveStick.getRawButtonPressed(5)){
+//			lockFlag = false;
+//		}
+//		
+//		if(lockFlag) {
+//			Timer.delay(0.3);
+//			intake.set(0.3);
+//		}
+//		else if(!lockFlag && stateFlag) {
+//			intake.set(-0.8);
+//			Timer.delay(0.1);
+//			intake.set(0);
+//			stateFlag = false;
+//		}
+		if(driveStick.getRawButtonPressed(5)) {
+			intake.set(0.4);
 		}
 		
-		if(lockFlag) {
-			Timer.delay(0.3);
-			intake.set(0.3);
-		}
-		else if(!lockFlag && stateFlag) {
-			intake.set(-0.8);
-			Timer.delay(0.1);
+		if(driveStick.getRawButtonPressed(6)) {
+			intake.set(-1);
+			Timer.delay(0.09);
 			intake.set(0);
-			stateFlag = false;
 		}
 	}	
 

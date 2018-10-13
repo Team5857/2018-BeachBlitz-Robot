@@ -20,10 +20,11 @@ public class AutonomousCommand extends CommandGroup {
             }
             else if(gameData.charAt(0) == 'R') {
                 addSequential(new AUTO_LOCK_INTAKE());
+                addSequential(new AUTO_SHORT_UP());
                 addSequential(new AUTO_SHORT_FWD());
                 addSequential(new AUTO_TURN());
-                addSequential(new AUTO_SHORT_UP());
-                addSequential(new AUTO_RELEASE_INTAKE());
+//                addSequential(new AUTO_SHORT_UP());
+//                addSequential(new AUTO_RELEASE_INTAKE());
             }
             else if(gameData.charAt(0) == 'L') {
                 addSequential(new AUTO_LOCK_INTAKE());

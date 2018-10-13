@@ -37,16 +37,16 @@ public class DriveTrain extends Subsystem {
 		}
 		
 		if(driveMode.equals("half_speed")) {
-			DriveTrain.left1.set(driveStick.getRawAxis(1)/2);
-			DriveTrain.left2.set(driveStick.getRawAxis(1)/2);
-			DriveTrain.right1.set(-driveStick.getRawAxis(5)/2);
-			DriveTrain.right2.set(-driveStick.getRawAxis(5)/2);
+			DriveTrain.left1.set(-driveStick.getRawAxis(1)/2);
+			DriveTrain.left2.set(-driveStick.getRawAxis(1)/2);
+			DriveTrain.right1.set(driveStick.getRawAxis(5)/2);
+			DriveTrain.right2.set(driveStick.getRawAxis(5)/2);
 		}
 		else if(driveMode.equals("full_speed")) {
-			DriveTrain.left1.set(driveStick.getRawAxis(1));
-			DriveTrain.left2.set(driveStick.getRawAxis(1));
-			DriveTrain.right1.set(-driveStick.getRawAxis(5));
-			DriveTrain.right2.set(-driveStick.getRawAxis(5));
+			DriveTrain.left1.set(-driveStick.getRawAxis(1));
+			DriveTrain.left2.set(-driveStick.getRawAxis(1));
+			DriveTrain.right1.set(driveStick.getRawAxis(5));
+			DriveTrain.right2.set(driveStick.getRawAxis(5));
 
 			if(secondaryStick.getRawButtonPressed(1)) {
 				time1 = System.currentTimeMillis();
@@ -61,7 +61,7 @@ public class DriveTrain extends Subsystem {
 					DriveTrain.right1.set(0);
 					DriveTrain.right2.set(0);
 				}
-				SmartDashboard.put("TIME", time2 - time1)
+				System.out.println(time2-time1);
 			}
 
 			DriveTrain.left1.set(driveStick.getRawAxis(1));
@@ -108,7 +108,7 @@ public class DriveTrain extends Subsystem {
 		right1.set(-1);
 		right2.set(-1);
 		
-		Timer.delay(0.2);
+		Timer.delay(0.1);
 		
 		left1.set(0);
 		left2.set(0);

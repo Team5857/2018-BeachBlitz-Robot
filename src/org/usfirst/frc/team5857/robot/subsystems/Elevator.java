@@ -33,7 +33,6 @@ public class Elevator extends Subsystem {
 	public static SpeedController elevator1, elevator2;
 
 	public Elevator() {
-		((BaseMotorController) elevator2).setSelectedSensorPosition(0, 0, 10);
 		minValue = 0;
 		maxValue = 70000;
 		elevator1 = new WPI_TalonSRX(14);
@@ -170,12 +169,15 @@ public class Elevator extends Subsystem {
 			}
 		}
 		else if(type.equals("SHORT")) {
-			while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < 40000) {
+			//while(((BaseMotorController) elevator2).getSelectedSensorPosition(0) < 1) {
 				elevator1.set(1);
 				elevator2.set(-1);
+				Timer.delay(1);
+				elevator1.set(0);
+				elevator2.set(0);
 			}
 		}
-	}
+	//}
 
 	public void autoMoveElevatorDown(String type) {
 		if(type.equals("LONG")) {

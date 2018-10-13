@@ -14,7 +14,7 @@ public class AUTO_SHORT_FWD extends Command {
 	
 	protected void execute()
 	{
-		Robot.driveTrain.autoDriveForward(1, 1, 1, 3);
+		Robot.driveTrain.autoDriveForward(0.3, 1, 1, 1);
 	}
 	
 	protected boolean isFinished() {
